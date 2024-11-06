@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,47 +12,26 @@ int main(){
     FILE *fp;
     fp = fopen(airport, "w");
 
-    int i;
+    int numRunways;
     char rwyID[4];
-    char rwyHDG[4];
-    char rwyLEN[6];
-    int size;
+    int rwyHDG;
+    int rwyLEN;
 
-    struct Airport{
-        char id[4];
-        char hdg[4];
-        char length[6];
-    };
+    printf("\n# of Runways: ");
+    scanf("%d", &numRunways);
+
+    fprintf(fp, "ICAO: %s", airport);
+    fprintf(fp, "\nID\tHDG\tLENGTH\n");
+    for(int i = 0; i< numRunways; i++){
+        printf("\nEnter Runway ID: ");
+        scanf("%s", rwyID);
+        printf("%s HDG: ", rwyID);
+        scanf("%d", &rwyHDG);
+        printf("%s LENGTH: ", rwyID);
+        scanf("%d", &rwyLEN);
+        fprintf(fp, "%s\t%d\t%d\n", rwyID, rwyHDG, rwyLEN);
+    }
 
     
-
-    printf("\nNumber of Runwys: ");
-    scanf("%d", &size);
-
-    struct Airport runways[size];
-
-    fprintf(fp, "ICAO: %s\nID\tHDG\tLENGTH\n", airport);
-    for (int i = 0; i < size; ++i)
-    {
-        // Read data
-        printf("Record #%d\n", i + 1);
-        printf("RWY ID: "); scanf("%s", rwyID);
-        printf("RWY HDG: "); scanf("%s", rwyHDG);
-        printf("RWY LENGTH:  "); scanf("%s", rwyLEN);
-        printf("\n");
-
-        strcpy(runways[i].id, rwyID);
-        strcpy(runways[i].hdg, rwyHDG);
-        strcpy(runways[i].length, rwyLEN);
-
-
-        // Save data
-        // fprintf(fp, "%s\t%s\t%s\n", runways[i].id, runways[i].hdg, runways[i].length);
-    }
-
-    for(int i = 0; i < size; ++i){
-        fprintf(fp, "%s\t%s\t%s\n", runways[i].id, runways[i].hdg, runways[i].length);
-    }
-
     fclose(fp);
 }
