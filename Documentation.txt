@@ -13,6 +13,8 @@ void runwaySearch(char* rwyID, int* rwyHDG, int* rwyLEN) - This function searche
 
 int adjustPerssureAlt(int tablePress) - This function adjusts the pressure altitude passed as an argument for use in table look ups. It rounds to the next heighest number as per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
 
+int adjustTemperature(int tableTemp) - This function adjusts the temperature passed as an argument for use in table look ups. It rounds to the next heighest number as per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
+
 void fetchTable() - This function imports the data from the groundRollTable into the array of structure: PERFTABLE declared in the header file to be made available to the functions of this file. MUST BE ABOVE ANY FUNCTIONS THAT RELY ON DATA FROM THE PERFTABLE FILE!!!!
 
 void printTable(int  tableTemp) - This function prints out the data table for the imput temperature.(fetchTable() must be called prior to calling this funciton)
