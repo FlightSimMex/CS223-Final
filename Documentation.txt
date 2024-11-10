@@ -1,11 +1,22 @@
 c172perf.h
+Data:
+struct PERFTABLE - Defined structure for a performance table with atributes temperature and sea level to 8000ft
+
+strct PERFTABLE sfld[5] - array of structures used to store the c172 short field landing distance table when inported from file.
+
+
+Functions:
 
 void readAirport() - This function imports the data from an airport file (airport selected by user when prompted for the airport ICAO), creates a strcture that contans a list of all runway identifiers, runway headings, and runway distance. It then prints out the structure to the terminal.
-void runwaySearch(char* rwyID, int* rwyHDG, int* rwyLEN) - This function searches an airport file for a specific runway (airport selected by user when prompted for the airport ICAO, runway selected by user when prompted for the RWY ID). It uses the readAirport() code to create the structure. It then searches the structure and assigns the corresponding values to the main funciton variables using pointers.
-int adjustPerssureAlt(int tablePress) - This function adjusts the pressure altitude passed as an argument for use in table look ups. It rounds to the next heighest number as per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
-void printPerfTable(int tableTemp) - This function prints out the corresponding Ground Roll Perfomance Table from the groundRollTable document given a temperature argument. Valid Arguments are (0, 10, 20, 30, 40).
-int fetchGroundRoll(int tableTemp, int tablePressure) - This Function imports the groundRollTable document into its corresponding structures. It then looks for the correct table given the temperature argument. It then searches the table for the passed pressure altitude and returns the unadjusted ground roll.
 
-AirportTool
+void runwaySearch(char* rwyID, int* rwyHDG, int* rwyLEN) - This function searches an airport file for a specific runway (airport selected by user when prompted for the airport ICAO, runway selected by user when prompted for the RWY ID). It uses the readAirport() code to create the structure. It then searches the structure and assigns the corresponding values to the main funciton variables using pointers.
+
+int adjustPerssureAlt(int tablePress) - This function adjusts the pressure altitude passed as an argument for use in table look ups. It rounds to the next heighest number as per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
+
+void fetchTable() - This function imports the data from the groundRollTable into the array of structure: PERFTABLE declared in the header file to be made available to the functions of this file. MUST BE ABOVE ANY FUNCTIONS THAT RELY ON DATA FROM THE PERFTABLE FILE!!!!
+
+void printTable(int  tableTemp) - This function prints out the data table for the imput temperature.(fetchTable() must be called prior to calling this funciton)
+
+AirportTool (Folder)
 
 airportTool.exe - this executable can be used to create a new airport file, view an existing airport or search for a runway at an airport.
