@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 struct PERFTABLE {
         int temp;
@@ -16,6 +17,7 @@ struct PERFTABLE {
     };
 
 struct PERFTABLE sfld[5];
+
 
 void readAirport(){
     char icao[5];
@@ -92,9 +94,9 @@ void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
     int rhdg;
     int rlen;
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    //printf("%s", discard);
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    //printf("%s", discard);
 
 
     struct Runway{
@@ -166,7 +168,7 @@ int adjustTemperature(int tableTemp){
 }
 
 void printTable(int tableTemp){
-
+    
     printf("\nThe Table for %dC is: \n\nPA \tGR\t50FT\n", tableTemp);
     printf("\nSL\t%d\t%d\n1000ft\t%d\t%d\n2000ft\t%d\t%d\n3000ft\t%d\t%d\n4000ft\t%d\t%d\n5000ft\t%d\t%d\n6000ft\t%d\t%d\n7000ft\t%d\t%d\n8000ft\t%d\t%d",
     sfld[tableTemp/10].sl/10000,sfld[tableTemp/10].sl%10000,
@@ -187,7 +189,7 @@ void fetchTable(){
 
 
     FILE *fin;
-    fin = fopen("/files/Data/groundRollTable","r");
+    fin = fopen("files/Data/groundRollTable","r");
 
     while(fscanf(fin,"%d %d %d %d %d %d %d %d %d %d", &ttemp, &tsl, &t1,&t2, &t3, &t4, &t5, &t6, &t7, &t8) == 10){
        
@@ -208,8 +210,59 @@ void fetchTable(){
     }
 
     fclose(fin);
-
+    
    
+}
+
+int getDistances(int temp, int press, int* ptrGR, int* ptr50ft){
+    press = adjustPressureAlt(press);
+    temp = adjustTemperature(temp)/10;
+    
+
+    switch (press/1000)
+    {
+    case 0:
+        *ptrGR = sfld[temp].sl/10000;
+        *ptr50ft = sfld[temp].sl%10000;
+        printf("%d",sfld[temp].sl/10000);
+        printf("%d",sfld[temp].sl%10000);
+        break;
+    case 1:
+        *ptrGR = sfld[temp].onek/10000;
+        *ptr50ft = sfld[temp].onek%10000;
+        break;
+    case 2:
+        *ptrGR = sfld[temp].twok/10000;
+        *ptr50ft = sfld[temp].twok%10000;
+        break;
+    case 3:
+        *ptrGR = sfld[temp].threek/10000;
+        *ptr50ft = sfld[temp].threek%10000;
+        break;
+    case 4:
+        *ptrGR = sfld[temp].fourk/10000;
+        *ptr50ft = sfld[temp].fourk%10000;
+        break;
+    case 5:
+        *ptrGR = sfld[temp].fivek/10000;
+        *ptr50ft = sfld[temp].fivek%10000;
+        break;
+    case 6:
+        *ptrGR = sfld[temp].sixk/10000;
+        *ptr50ft = sfld[temp].sixk%10000;
+        break;
+    case 7:
+        *ptrGR = sfld[temp].sevenk/10000;
+        *ptr50ft = sfld[temp].sevenk%10000;
+        break;
+    case 8:
+        *ptrGR = sfld[temp].eghtk/10000;
+        *ptr50ft = sfld[temp].eghtk%10000;
+        break;
+    default:
+        break;
+    }
+
 }
 
 void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft){
