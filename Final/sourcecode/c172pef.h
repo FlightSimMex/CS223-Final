@@ -211,3 +211,67 @@ void fetchTable(){
 
    
 }
+
+void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft){
+    double totalAdjustmentGR, totalAdjustment50;
+    int groundRoll, fiftyFeet;
+    char ruwnayID[2];
+    groundRoll = *ptrGR;
+    fiftyFeet = *ptr50ft;
+    strncpy(ruwnayID,rwyID,1);
+
+    printf("\nVaues recieved: %d %c %d %d", headWindComponent,ruwnayID[0], groundRoll, fiftyFeet);
+
+
+    //wind adjustment
+    if(headWindComponent>0){
+        double adjustment = 0.1/9;
+        totalAdjustmentGR =- (adjustment*headWindComponent);
+        totalAdjustment50 =- (adjustment*headWindComponent);
+    }else if(headWindComponent<0){
+        double adjustment = 0.1/2;
+        totalAdjustmentGR =+ -(adjustment*headWindComponent);
+        totalAdjustment50 =+ -(adjustment*headWindComponent);
+    }else if(headWindComponent<-10){
+        printf("\nLanding not allowed: TALIWIND COMPONENT EXCEEDED!");
+        exit(0);
+    }
+
+
+    //Grass Adjustment
+    if(strcmp(ruwnayID, "G") == 0){
+        totalAdjustmentGR = totalAdjustmentGR+ 0.45;
+    }
+
+
+
+    printf("\nGR Adjust: %lf 50 Adjust: %lf\n", totalAdjustmentGR, totalAdjustment50);
+    //Apply adjsutment
+
+    if(totalAdjustment50>0){
+        fiftyFeet = (int) round(fiftyFeet*(totalAdjustment50+1.0));
+        
+    } else if(totalAdjustment50 <0){
+        fiftyFeet = (int) round(fiftyFeet*(1+totalAdjustment50));
+        
+    }
+
+    if(totalAdjustmentGR>0){
+        groundRoll = (int) round(groundRoll*(totalAdjustmentGR+1.0));
+       
+    } else if(totalAdjustmentGR <0){
+        groundRoll = (int) round(groundRoll*(1+totalAdjustmentGR));
+        
+    }
+
+    
+   
+
+    //return
+    
+    *ptrGR = groundRoll;
+    *ptr50ft = fiftyFeet;
+    
+    
+
+}
