@@ -142,6 +142,21 @@ int adjustPressureAlt(int tablePress){
     return tablePress;
 }
 
+int adjustTemperature(int tableTemp){
+     if(tableTemp<=0){
+        tableTemp = 0;
+    }else if (tableTemp>0&&tableTemp<=10){
+        tableTemp = 10;
+    }else if(tableTemp>10&&tableTemp<=20){
+        tableTemp = 20;
+    }else if(tableTemp>20&&tableTemp<=30){
+        tableTemp = 30;
+    }else if (tableTemp >30){
+        tableTemp = 40;
+    }
+    return tableTemp;
+}
+
 void printTable(int tableTemp){
 
     printf("\nThe Table for %dC is: \n\nPA \tGR\t50FT\n", tableTemp);
