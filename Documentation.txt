@@ -19,6 +19,10 @@ void fetchTable() - This function imports the data from the groundRollTable into
 
 void printTable(int  tableTemp) - This function prints out the data table for the imput temperature.(fetchTable() must be called prior to calling this funciton)
 
+int getDistances(int temp, int press, int* ptrGR,int* ptr50ft) - This function returns the ground roll and fifty feet distance for a given temperature and presure altitude using pointers.
+
+void adjustDistance(int headWindComponent, char rwID, int* ptrGR, int ptr*ptr50ft) - This fuinction returns the adjusted ground roll and fifty feet distance, given the headwind component (negative if tailwind) and runway ID to check if its grass.
+
 AirportTool (Folder)
 
 airportTool.exe - this executable can be used to create a new airport file, view an existing airport or search for a runway at an airport.
