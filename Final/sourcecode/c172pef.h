@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#define Vso 40
+
 
 struct PERFTABLE {
         int temp;
@@ -23,7 +25,7 @@ void readAirport(){
     char icao[5];
     char path[20] = "files/Airports/";
     
-    printf("Airport ICAO: ");
+    printf("\nAirport ICAO: ");
     scanf("%s", icao);
     strncat(path,icao,4);
 
@@ -74,11 +76,11 @@ void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
     char rwyTargetID[4];
     char path[20] = "files/Airports/";
     
-    printf("Airport ICAO: ");
+    printf("\nAirport ICAO: ");
     scanf("%s", icao);
     strncat(path,icao,4);
 
-    printf("Enter RWY ID: ");
+    printf("\nEnter RWY ID: ");
     scanf("%s", rwyTargetID);
 
     FILE *fin;
@@ -180,7 +182,7 @@ void printTable(int tableTemp){
     sfld[tableTemp/10].sixk/10000,sfld[tableTemp/10].sixk%10000,
     sfld[tableTemp/10].sevenk/10000,sfld[tableTemp/10].sevenk%10000,
     sfld[tableTemp/10].eghtk/10000, sfld[tableTemp/10].eghtk%10000);
-   
+
 }
 
 void fetchTable(){
@@ -327,4 +329,28 @@ void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft)
     
     
 
+}
+
+int approachSpeed(int actualWeight){
+    double Vapp = 1.3 * Vso * sqrt(actualWeight/2550);
+    int result = ceil(Vapp);
+    return result;
+}
+
+int pressureAltitude(double altimeter, int elevation){
+    int temporary = (29.92 - altimeter) * 1000 + elevation;
+    int result = ceil(temporary);
+    return result;
+}
+
+int headwindComponent(int* rwyHDG, int windDir, int windSpeed){
+    double headwindSpeed = windSpeed * cos(abs(windDir - *rwyHDG));
+    int result = ceil(headwindSpeed);
+    return result;
+}
+
+int tailwindComponent(int* rwyHDG, int windDir, int windSpeed){
+    double tailwindSpeed = windSpeed * sin(abs(windDir - *rwyHDG));
+    int result = ceil(tailwindSpeed);
+    return result;
 }
