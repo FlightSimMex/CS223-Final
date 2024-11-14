@@ -8,26 +8,30 @@
 int main(){
     //Variable Declarations
     int programEnd = 0;
-    int tableTemp, tablePress, groundRoll, fiftyFeet, weight, rwyHDG =0, rwyLEN= 0, windDir, windSpeed;
+    int tableTemp, tablePress, groundRoll, fiftyFeet, weight, rwyHDG =0, rwyLEN= 0, windDir, windSpeed, actualWeight, elevation, altimeter;
     char rwyTargetID[4];
 
     while(!programEnd){
         //Gets Weight
-        printf("\n\nEnter landing weight in lbs: ");
+        printf("\n\nEnter weight before takeoff in lbs: ");
+        scanf("%d", &actualWeight);
+        printf("\nEnter landing weight in lbs: ");
         scanf("%d", &weight);
 
-    
-
         //Gather Weather Information
-        printf("\n\nWeather Data:\n");
-        printf("Enter Wind Direction: ");
+        printf("\nWeather Data:\n");
+        printf("\nEnter Wind Direction: ");
         scanf("%d", &windDir);
-        printf("Enter Wind Speed: ");
+        printf("\nEnter Wind Speed: ");
         scanf("%d", &windSpeed);
-        printf("Enter Temperature in C: ");
+        printf("\nEnter Temperature in C: ");
         scanf("%d", &tableTemp);
-        printf("Enter Pressure Altitude in ft: ");
+        printf("\nEnter Pressure Altitude in ft: ");
         scanf("%d", &tablePress);
+        printf("\nEnter Elevation in feet: ");
+        scanf("%D", &elevation);
+        printf("\nEnter Altimeter Settings: ");
+        scanf("%d", &altimeter);
 
         //Gets Airport/Runway info, rwyID, rwyHDG and rwyLEN.
         printf("\nAirport Data:\n");
@@ -46,7 +50,6 @@ int main(){
         printf("\nCalculate New Performance?\n1. Yes\n2. No\n");
         scanf("%d",programEnd);
         programEnd -=1;
-      
 
     }
     
