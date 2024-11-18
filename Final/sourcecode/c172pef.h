@@ -389,7 +389,7 @@ void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft)
 
 }
 
-int approachSpeed(int actualWeight){
+int approachSpeed(double actualWeight){
     double Vapp = 1.3 * Vso * sqrt(actualWeight/2550);
     int result = ceil(Vapp);
     return result;
