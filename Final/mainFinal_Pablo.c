@@ -28,7 +28,7 @@ void getCHAR(char* str,  char* output){
 int main(){
     //Variable Declarations
     int programEnd = 0;
-    int weight = 0, windDir, windSpeed, headWind, xWind, tempC, altSetting, rwyHDG, rwyLEN, airportElevation, pressureAltitude, groundRoll, clear50ft;
+    int weight = 0, windDir, windSpeed, headWind, xWind, tempC, altSetting, rwyHDG, rwyLEN, airportElevation, pressureAltitude, groundRoll, clear50ft, appSpeed;
     char icao[5], icaoPath[20], rwyID[5];
     
     //Initialize variables while getting user inputs
@@ -70,7 +70,13 @@ int main(){
     //Adjusting distances for the envirormental conditions and runway type
     adjustDisance(headWind, rwyID, &groundRoll, &clear50ft); //Takes the haedwind/tailwind components, and rwyID (to determine if its a grass runway), and adjusts landing distances based on the C172 PIM. Returns new values using pointers.
 
-    printf("ICAO:%s RWY:%S\t Ground Roll:%dft Distance to Clear a 50ft obstacle:%d\n\nComputed using: Wind:%d@%dkts Temp:%dC Pressure Altitude:%dft",icao,rwyID,groundRoll,clear50ft,windDir,windSpeed,tempC,pressureAltitude);
+
+
+    //Calculate Appraoch Speed
+    appSpeed = approachSpeed(weight);
+
+
+    printf("\n\nVref:%dkts Vapp:%dkts\nICAO:%s RWY:%S\t Ground Roll:%dft Distance to Clear a 50ft obstacle:%d\n\nComputed using: Wind:%d@%dkts Temp:%dC Pressure Altitude:%dft",appSpeed, appSpeed+5,icao,rwyID,groundRoll,clear50ft,windDir,windSpeed,tempC,pressureAltitude);
     return 0;
     
 }
