@@ -20,17 +20,18 @@ struct PERFTABLE {
 
 struct PERFTABLE sfld[5];
 
-
-void readAirport(){
-    char icao[5];
+//Airport Operations and Handeling
+void getAirport(char* ptricao, char* ptricaoPath){
     char path[20] = "files/Airports/";
-    
-    printf("\nAirport ICAO: ");
-    scanf("%s", icao);
-    strncat(path,icao,4);
 
+    printf("Airport ICAO: ");
+    scanf("%s", ptricao);
+    strncat(path,ptricao,4);
+    strcpy(ptricaoPath, path);
 
-    
+}
+
+void printAirport(char path[20]){
     FILE *fin;
     fin = fopen(path, "r");
 
@@ -43,10 +44,17 @@ void readAirport(){
     char rid[4];
     int rhdg;
     int rlen;
+    int airportElevation;
+
+    //Parsing the first line for the elevation 
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    char *token = strtok(discard, " "); //gets up to the first space
+    token = strtok(NULL, "\t");//gets up to the tab (ELEVATION IS BETWEEN TAB AND SECOND SPACE)
+    token = strtok(NULL, " ");//gets airport elevation.
+    airportElevation = atoi(token);//converts the value into an integer and stores it at airportElevation.
+    printf("Elevation: %dft\n", airportElevation);
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    printf("%s", discard);//Prints headers
 
 
     struct Runway{
@@ -54,6 +62,7 @@ void readAirport(){
         int hdg;
         int length;
     };
+
     int rwy=0;
 
     struct Runway airport[20];
@@ -69,18 +78,43 @@ void readAirport(){
     for(int r =0; r < rwy; r++){
         printf("%s\t%d\t%d\n", airport[r].id, airport[r].hdg, airport[r].length);
     }
+
 }
 
-void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
-    char icao[5];
-    char rwyTargetID[4];
-    char path[20] = "files/Airports/";
-    
-    printf("\nAirport ICAO: ");
-    scanf("%s", icao);
-    strncat(path,icao,4);
+int getFieldElevation(char path[20]){
+    //opening file based on passed path
+    FILE *fin;
+    fin = fopen(path, "r");
 
-    printf("\nEnter RWY ID: ");
+    //file handeling if not found
+    if(fin == NULL){
+        printf("\nFILE NOT FOUND");
+        exit(0);
+    }
+
+    //variable declarations for returns and handeling
+    char discard[50];
+    int airportElevation;
+
+    //Parsing the first line for the elevation 
+    fgets(discard, 50, fin);
+    char *token = strtok(discard, " "); //gets up to the first space
+    token = strtok(NULL, "\t");//gets up to the tab (ELEVATION IS BETWEEN TAB AND SECOND SPACE)
+    token = strtok(NULL, " ");//gets airport elevation.
+    airportElevation = atoi(token);//converts the value into an integer and stores it at airportElevation.
+    fgets(discard, 50, fin);
+    
+    //close file
+    fclose(fin); 
+
+    //returns airport elevation
+    return airportElevation;
+}
+
+void runwaySearch(char path[20],char* ptrrwyID,int* ptrrwyHDG, int* ptrrwyLEN){
+    char rwyTargetID[4];
+    
+    printf("Enter RWY ID: ");
     scanf("%s", rwyTargetID);
 
     FILE *fin;
@@ -119,9 +153,9 @@ void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
     int found = 0;
     for(int r = 0; r < rwy; r++){
         if(strcmp(rwyTargetID,airport[r].id) == 0){
-           *rwyHDG = airport[r].hdg;
-           *rwyLEN = airport[r].length;
-           strcpy(rwyID,rwyTargetID);
+           *ptrrwyHDG = airport[r].hdg;
+           *ptrrwyLEN = airport[r].length;
+           strcpy(ptrrwyID,rwyTargetID);
            found = 1;
         }
     }
@@ -133,6 +167,9 @@ void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
     
 }
 
+
+
+//Envirormental
 int adjustPressureAlt(int tablePress){
      if(tablePress>0&&tablePress<1001){
         tablePress = 1000;
@@ -169,6 +206,25 @@ int adjustTemperature(int tableTemp){
     return tableTemp;
 }
 
+int calculatePressureAltitude(double altimeter, int elevation){
+    int temporary = (29.92 - altimeter) * 1000 + elevation;
+    int result = ceil(temporary);
+    return result;
+}
+
+int headwindComponent(int rwyHDG, int windDir, int windSpeed){
+    double headwindSpeed = windSpeed * cos(abs(windDir - rwyHDG));
+    int result = ceil(headwindSpeed);
+    return result;
+}
+
+int crosswindComponent(int rwyHDG, int windDir, int windSpeed){
+    double crosswindSpeed = windSpeed * sin(abs(windDir - rwyHDG));
+    int result = ceil(crosswindSpeed);
+    return result;
+}
+
+//For Debugging files
 void printTable(int tableTemp){
     
     printf("\nThe Table for %dC is: \n\nPA \tGR\t50FT\n", tableTemp);
@@ -185,6 +241,7 @@ void printTable(int tableTemp){
 
 }
 
+//VERY IMPORTANT FUNCTION GETS ALL THE PERFORMANCE VALUES AND STORES THEM IN THE HEADER FILE
 void fetchTable(){
     int ttemp, tsl, t1, t2, t3, t4, t5, t6, t7, t8, index;
     
@@ -216,6 +273,7 @@ void fetchTable(){
    
 }
 
+//Performance calculations
 int getDistances(int temp, int press, int* ptrGR, int* ptr50ft){
     press = adjustPressureAlt(press);
     temp = adjustTemperature(temp)/10;
@@ -226,8 +284,8 @@ int getDistances(int temp, int press, int* ptrGR, int* ptr50ft){
     case 0:
         *ptrGR = sfld[temp].sl/10000;
         *ptr50ft = sfld[temp].sl%10000;
-        printf("%d",sfld[temp].sl/10000);
-        printf("%d",sfld[temp].sl%10000);
+        //printf("%d",sfld[temp].sl/10000);
+        //printf("%d",sfld[temp].sl%10000);
         break;
     case 1:
         *ptrGR = sfld[temp].onek/10000;
@@ -275,7 +333,7 @@ void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft)
     fiftyFeet = *ptr50ft;
     strncpy(ruwnayID,rwyID,1);
 
-    printf("\nVaues recieved: %d %c %d %d", headWindComponent,ruwnayID[0], groundRoll, fiftyFeet);
+    //printf("\nVaues recieved: %d %c %d %d", headWindComponent,ruwnayID[0], groundRoll, fiftyFeet);
 
 
     //wind adjustment
@@ -300,7 +358,7 @@ void adjustDisance(int headWindComponent, char rwyID[],int* ptrGR, int* ptr50ft)
 
 
 
-    printf("\nGR Adjust: %lf 50 Adjust: %lf\n", totalAdjustmentGR, totalAdjustment50);
+    //printf("\nGR Adjust: %lf 50 Adjust: %lf\n", totalAdjustmentGR, totalAdjustment50);
     //Apply adjsutment
 
     if(totalAdjustment50>0){
@@ -337,27 +395,4 @@ int approachSpeed(int actualWeight){
     return result;
 }
 
-int pressureAltitude(double altimeter, int elevation){
-    int temporary = (29.92 - altimeter) * 1000 + elevation;
-    int result = ceil(temporary);
-    return result;
-}
 
-int headwindComponent(int* rwyHDG, int windDir, int windSpeed){
-    double headwindSpeed = windSpeed * cos(abs(windDir - *rwyHDG));
-    int result = ceil(headwindSpeed);
-    return result;
-}
-
-int tailwindComponent(int* rwyHDG, int windDir, int windSpeed){
-    double tailwindSpeed = windSpeed * sin(abs(windDir - *rwyHDG));
-    int result = ceil(tailwindSpeed);
-    return result;
-}
-
-int inputInt(const char *text){
-    int value;
-    printf("%s", text);
-    scanf("%d", &value);
-    return value;
-}

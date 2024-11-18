@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+void getAirport(char* ptricao, char* ptricaoPath){
+    char path[20] = "files/Airports/";
+
+    printf("Airport ICAO: ");
+    scanf("%s", ptricao);
+    strncat(path,ptricao,4);
+    strcpy(ptricaoPath, path);
+
+}
 
 void createAirport(){
     char airport[5];
@@ -20,11 +29,16 @@ void createAirport(){
     char rwyID[4];
     int rwyHDG;
     int rwyLEN;
+    int airportElevation = 0;
 
     printf("\n# of Runways: ");
     scanf("%d", &numRunways);
 
-    fprintf(fp, "ICAO: %s", airport);
+    printf("\nEnter Airport Elevation: ");
+    scanf("%d", &airportElevation);
+
+    fprintf(fp, "ICAO: %s\t%d ft", airport, airportElevation);
+    
     fprintf(fp, "\nID\tHDG\tLENGTH\n");
     for(int i = 0; i< numRunways; i++){
         printf("\nEnter Runway ID: ");
@@ -40,16 +54,7 @@ void createAirport(){
     fclose(fp);
 }
 
-
-void readAirport(){
-    char icao[5];
-    char path[20] = "files/Airports/";
-    
-    printf("Airport ICAO: ");
-    scanf("%s", icao);
-    strncat(path,icao,4);
-    
-
+void printAirport(char path[20]){
     FILE *fin;
     fin = fopen(path, "r");
 
@@ -62,10 +67,17 @@ void readAirport(){
     char rid[4];
     int rhdg;
     int rlen;
+    int airportElevation;
+
+    //Parsing the first line for the elevation 
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    char *token = strtok(discard, " "); //gets up to the first space
+    token = strtok(NULL, "\t");//gets up to the tab (ELEVATION IS BETWEEN TAB AND SECOND SPACE)
+    token = strtok(NULL, " ");//gets airport elevation.
+    airportElevation = atoi(token);//converts the value into an integer and stores it at airportElevation.
+    printf("Elevation: %dft\n", airportElevation);
     fgets(discard, 50, fin);
-    printf("%s", discard);
+    printf("%s", discard);//Prints headers
 
 
     struct Runway{
@@ -73,6 +85,7 @@ void readAirport(){
         int hdg;
         int length;
     };
+
     int rwy=0;
 
     struct Runway airport[20];
@@ -88,6 +101,37 @@ void readAirport(){
     for(int r =0; r < rwy; r++){
         printf("%s\t%d\t%d\n", airport[r].id, airport[r].hdg, airport[r].length);
     }
+
+}
+
+int getFieldElevation(char path[20]){
+    //opening file based on passed path
+    FILE *fin;
+    fin = fopen(path, "r");
+
+    //file handeling if not found
+    if(fin == NULL){
+        printf("\nFILE NOT FOUND");
+        exit(0);
+    }
+
+    //variable declarations for returns and handeling
+    char discard[50];
+    int airportElevation;
+
+    //Parsing the first line for the elevation 
+    fgets(discard, 50, fin);
+    char *token = strtok(discard, " "); //gets up to the first space
+    token = strtok(NULL, "\t");//gets up to the tab (ELEVATION IS BETWEEN TAB AND SECOND SPACE)
+    token = strtok(NULL, " ");//gets airport elevation.
+    airportElevation = atoi(token);//converts the value into an integer and stores it at airportElevation.
+    fgets(discard, 50, fin);
+    
+    //close file
+    fclose(fin); 
+
+    //returns airport elevation
+    return airportElevation;
 }
 
 void runwaySearch(char* rwyID,int* rwyHDG, int* rwyLEN){
