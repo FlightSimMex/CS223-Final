@@ -354,3 +354,10 @@ int tailwindComponent(int* rwyHDG, int windDir, int windSpeed){
     int result = ceil(tailwindSpeed);
     return result;
 }
+
+int inputInt(const char *text){
+    int value;
+    printf("%s", text);
+    scanf("%d", &value);
+    return value;
+}
