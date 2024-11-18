@@ -3,35 +3,24 @@
 #include <string.h>
 #include "sourcecode/c172pef.h"
 
-
-
 int main(){
     //Variable Declarations
-    int programEnd = 0;
-    int tableTemp, tablePress, groundRoll, fiftyFeet, weight, rwyHDG =0, rwyLEN= 0, windDir, windSpeed, actualWeight, elevation, altimeter;
+    int  groundRoll, fiftyFeet, rwyHDG =0, rwyLEN= 0, programEnd = 0;
     char rwyTargetID[4];
 
     while(!programEnd){
-        //Gets Weight
-        printf("\n\nEnter weight before takeoff in lbs: ");
-        scanf("%d", &actualWeight);
-        printf("\nEnter landing weight in lbs: ");
-        scanf("%d", &weight);
+        //Gather Int values
+        int actualWeight = inputInt("\nEnter the Weight of the Aircraft: ");
+        int weight = inputInt("\nEnter the Weight at touchdown: ");
+        int windDir = inputInt("\nEnter the Wind direction(1-360 degrees): ");
+        int windSpeed = inputInt("\nEnter the Wind Speed in MPH: ");
+        int tableTemp = inputInt("\nEnter the Temperature in Celcius: ");
+        int tablePress = inputInt("\nEnter the Pressure Altitude in ft: ");
+        int elevation = inputInt("\nEnter the Elevation in ft: ");
+        int altimeter = inputInt("\nEnter the Altimeter Settings: ");
 
         //Gather Weather Information
         printf("\nWeather Data:\n");
-        printf("\nEnter Wind Direction: ");
-        scanf("%d", &windDir);
-        printf("\nEnter Wind Speed: ");
-        scanf("%d", &windSpeed);
-        printf("\nEnter Temperature in C: ");
-        scanf("%d", &tableTemp);
-        printf("\nEnter Pressure Altitude in ft: ");
-        scanf("%d", &tablePress);
-        printf("\nEnter Elevation in feet: ");
-        scanf("%D", &elevation);
-        printf("\nEnter Altimeter Settings: ");
-        scanf("%d", &altimeter);
 
         //Gets Airport/Runway info, rwyID, rwyHDG and rwyLEN.
         printf("\nAirport Data:\n");
@@ -47,8 +36,7 @@ int main(){
             printf("\nDistance Required: %d\t Distance Available: %d\t LANDING ALLOWED\n",groundRoll, rwyLEN); 
         }
 
-        printf("\nCalculate New Performance?\n1. Yes\n2. No\n");
-        scanf("%d",programEnd);
+        programEnd = inputInt("\nCalculate New Performance?\n1. Yes\n2. No\n");
         programEnd -=1;
 
     }
