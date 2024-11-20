@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <unistd.h>
+#include <fcntl.h>
 #define Vso 40
 
 
@@ -28,7 +30,6 @@ void getAirport(char* ptricao, char* ptricaoPath){
     scanf("%s", ptricao);
     strncat(path,ptricao,4);
     strcpy(ptricaoPath, path);
-
 }
 
 void printAirport(char path[20]){
@@ -81,6 +82,35 @@ void printAirport(char path[20]){
 
 }
 
+void printOutput(char* ptricao, char* ptrrwyID, int appSpeed, int groundRoll, int clear50ft, int windDir, int windSpeed, int tempC, int pressureAltitude){
+    FILE *fout;
+    fout = fopen("files/Output/out.txt", "w");
+
+    if (fout == NULL){
+        printf("\nFILE NOT FOUND");
+    }
+
+    fprintf(fout, "\nLanding Performance\n\t%s %s", ptricao, ptrrwyID);
+    fprintf(fout, "\n\nOutputs:\n");
+    fprintf(fout, "\tVref: %dkts\t\t\tVapp: %dkts\n\tGround Roll: %dft\t\tDistance to Clear a 50ft obsticle: %dft", appSpeed, appSpeed + 5, groundRoll, clear50ft);
+    fprintf(fout, "\n\nComputed Using:\n");
+    fprintf(fout, "\tTemp: %dC\t\t\tPressure Altitude: %dft\n\tWind %d degrees at %dkts", windDir, windSpeed, tempC, pressureAltitude);
+
+    fclose(fout);
+
+    fout = fopen("files/Output/out.txt", "r");
+
+    if (fout == NULL){
+        printf("\nFILE NOT FOUND");
+    }
+    
+    char line[200];
+
+    while (fgets(line, sizeof(line), fout) != NULL){
+        printf("%s", line);
+    }
+} 
+
 int getFieldElevation(char path[20]){
     //opening file based on passed path
     FILE *fin;
@@ -90,7 +120,7 @@ int getFieldElevation(char path[20]){
     if(fin == NULL){
         printf("\nFILE NOT FOUND");
         exit(0);
-    }
+    } 
 
     //variable declarations for returns and handeling
     char discard[50];
