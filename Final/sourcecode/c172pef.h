@@ -4,6 +4,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <windows.h>
 #define Vso 40
 
 
@@ -94,7 +95,7 @@ void printOutput(char* ptricao, char* ptrrwyID, int appSpeed, int groundRoll, in
     fprintf(fout, "\n\nOutputs:\n");
     fprintf(fout, "\tVref: %dkts\t\t\tVapp: %dkts\n\tGround Roll: %dft\t\tDistance to Clear a 50ft obsticle: %dft", appSpeed, appSpeed + 5, groundRoll, clear50ft);
     fprintf(fout, "\n\nComputed Using:\n");
-    fprintf(fout, "\tTemp: %dC\t\t\tPressure Altitude: %dft\n\tWind %d degrees at %dkts", windDir, windSpeed, tempC, pressureAltitude);
+    fprintf(fout, "\tTemp: %dC\t\t\tPressure Altitude: %dft\n\tWind %d degrees at %dkts", tempC, pressureAltitude, windSpeed, windDir);
 
     fclose(fout);
 
