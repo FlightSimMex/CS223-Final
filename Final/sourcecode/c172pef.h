@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <windows.h>
+#include <sys/stat.h>
 #define Vso 40
 
 
@@ -87,29 +88,15 @@ void printOutput(char* ptricao, char* ptrrwyID, int appSpeed, int groundRoll, in
     FILE *fout;
     fout = fopen("files/Output/out.txt", "w");
 
-    if (fout == NULL){
-        printf("\nFILE NOT FOUND");
-    }
-
     fprintf(fout, "\nLanding Performance\n\t%s %s", ptricao, ptrrwyID);
     fprintf(fout, "\n\nOutputs:\n");
-    fprintf(fout, "\tVref: %dkts\t\t\tVapp: %dkts\n\tGround Roll: %dft\t\tDistance to Clear a 50ft obsticle: %dft", appSpeed, appSpeed + 5, groundRoll, clear50ft);
+    fprintf(fout, "\tVref: %dkts\t\t\tVapp: %dkts\n\tGround Roll: %dft\t\tDistance to Clear a 50ft obstacle: %dft", appSpeed, appSpeed + 5, groundRoll, clear50ft);
     fprintf(fout, "\n\nComputed Using:\n");
     fprintf(fout, "\tTemp: %dC\t\t\tPressure Altitude: %dft\n\tWind %d degrees at %dkts", tempC, pressureAltitude, windSpeed, windDir);
 
     fclose(fout);
 
-    fout = fopen("files/Output/out.txt", "r");
-
-    if (fout == NULL){
-        printf("\nFILE NOT FOUND");
-    }
-    
-    char line[200];
-
-    while (fgets(line, sizeof(line), fout) != NULL){
-        printf("%s", line);
-    }
+    system("start files/Output/out.txt");
 } 
 
 int getFieldElevation(char path[20]){
