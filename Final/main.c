@@ -3,6 +3,7 @@
 #include <string.h>
 #include "sourcecode/c172pef.h"
 
+
 int getINT(char* str){
 	int input;	
     printf("Enter %s: ", str);
@@ -21,6 +22,7 @@ void getCHAR(char* str,  char* output){
 	scanf("%s", input);
     strcpy(output, input);
 }
+
 
 int main(){
      //Variable Declarations
@@ -76,7 +78,8 @@ int main(){
 
         printOutput(icao, rwyID, appSpeed, groundRoll, clear50ft, windDir, windSpeed, tempC, pressureAltitude);//Write output to file and call file to output
 
-        printf("\n\nWould you like to run the program again?\n1:Yes\n2:No\n");
+        printf("\nCalculation complete! outputting file:\n");
+        printf("\nWould you like to run the program again?\n1:Yes\n2:No\n");
         scanf("%d", &again);
 
         if(again >= 2 || again < 1){
