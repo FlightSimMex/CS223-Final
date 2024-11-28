@@ -1,0 +1,11 @@
+
+Landing Performance
+	KFIN 06
+
+Outputs:
+	Vref: 50kts			Vapp: 55kts
+	Ground Roll: 1150ft		Distance to Clear a 50ft obstacle: 2622ft
+
+Computed Using:
+	Temp: 30C			Pressure Altitude: -46ft
+	Wind 40 degrees at 33kts
