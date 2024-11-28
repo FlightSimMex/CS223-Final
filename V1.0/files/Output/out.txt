@@ -1,0 +1,11 @@
+
+Landing Performance
+	KDAB 07L
+
+Outputs:
+	Vref: 50kts			Vapp: 55kts
+	Ground Roll: 549ft		Distance to Clear a 50ft obstacle: 1224ft
+
+Computed Using:
+	Temp: 40C			Pressure Altitude: 1000ft
+	Wind 90 degrees at 20kts
