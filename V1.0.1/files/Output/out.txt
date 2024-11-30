@@ -1,0 +1,12 @@
+
+Landing Performance
+	KDAB Runway:07R
+
+Outputs:
+	Vref: 50kts			Vapp: 55kts
+	Ground Roll: 448ft		Distance to Clear a 50ft obstacle: 999ft
+Cross Wind Component:R19KTS
+
+Computed Using:
+	Temp: 40C			Pressure Altitude: 1000ft
+	Wind 40 degrees at 33kts

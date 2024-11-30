@@ -1,0 +1,1 @@
+dSpeed = getINT("Wind Sp
