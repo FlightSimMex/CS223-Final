@@ -1,38 +1,57 @@
 c172perf.h
 Data:
-struct PERFTABLE - Defined structure for a performance table with atributes temperature and sea level to 8000ft
+struct PERFTABLE - Defined structure for a performance table with atributes temperature and sea level to 
+   8000ft
 
-strct PERFTABLE sfld[5] - array of structures used to store the c172 short field landing distance table when inported from file.
+struct PERFTABLE sfld[5] - array of structures used to store the c172 short field landing distance table when 
+   inported from file.
 
 
 Functions:
 
-void readAirport() - This function imports the data from an airport file (airport selected by the user when prompted for the airport ICAO), and creates a structure that contains a list of all runway identifiers, runway headings, and runway distance. It then prints out the structure to the terminal.
+OUTPUT
 
-void printOutput(char* ptricao, char* ptrrwyID, int appSpeed, int groundRoll, int clear50ft, int windDir, int windSpeed, int tempC, int pressureAltitude) - This function takes the computed data from the user inputs and writes them into an output file, the function then calls the file and starts reading the formatted content of the file to the user.
+void printOutput(char* ptricao, char* ptrrwyID, int appSpeed, int groundRoll, int clear50ft, int windDir, int windSpeed, int tempC, int pressureAltitude, int xWindComponent, char xWindDirection[2]) - This function takes the computed data from the user inputs and writes them into an output file, the function then calls the file and starts reading the formatted content of the file to the user.
 
-void runwaySearch(char* rwyID, int* rwyHDG, int* rwyLEN) - This function searches an airport file for a specific runway (airport selected by the user when prompted for the airport ICAO, runway selected by the user when prompted for the RWY ID). It uses the readAirport() code to create the structure. It then searches the structure and assigns the corresponding values to the main function variables using pointers.
+
+AIRPORT FILE AND DATA HANDELING FUNCITONS 
+
+void getAirport(char* ptricao, char* ptricaoPath) -  This function takes in two string pointers one for the airport identifier and one for the airport file path. Using the information it asks the user to input the desired ICAO code, then it concatenats it with the default file path to create the new file path and returns both values using pointers.
+
+void createAirport() - This fuctions allows the user to create a new airport file and store it in the database. The funciton collects the airport identifer and creates a new file named after the identifier in the files/Airports/ directory. It then asks the user to enter the airport elevation and the number of runways and subsequently the runway identifier, heading, and length for each. It prints each input into the new airport file. It then updates the Airport Index file by appending the ICAO code 
+
+void printAirport() - This function imports the data from an airport file (airport selected by the user when prompted for the airport ICAO), and creates a structure that contains a list of all runway identifiers, runway headings, and runway distance. It then prints out the structure to the terminal.
+
+void deleteAirport(char airport[5], char path[20]) - This function askes the user for the identifier of the airport to be deleted. It then deletes the file using the remove() function and updates the airport index file, removing the identifer of the deleted airport.
+
+
+int getFieldElevation(char path[20]) - This funciton opens the airport file at the argument path, parses the data and returns the airport eleveation as an integer.
+
+void runwaySearch(char path[20],char* ptrrwyID,int* ptrrwyHDG, int* ptrrwyLEN) - This function searches an airport file for a specific runway selected by the user from the printed menu. It uses the readAirport() code to create the structure. It then searches the structure and assigns the corresponding values to the main function variables using pointers.
+
+ENVIRORMENTAL CONDITINOS 
 
 int adjustPerssureAlt(int tablePress) - This function adjusts the pressure altitude passed as an argument for use in table look ups. It rounds to the next heighest number as per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
 
 int adjustTemperature(int tableTemp) - This function adjusts the temperature passed as an argument for use in table lookups. It rounds to the next heighest number per the Cessna 172 POH Section 4 instructions for calculating NORMAL landing distance.
 
+int headwindComponent(int rwyHDG, int windDir, int windSpeed) - This function returns the headwind speed, given the runway heading, wind direction, and wind speed.
+
+int crosswindComponent(int rwyHDG, int windDir, int windSpeed) - This function returns the crosswind speed, given the runway heading, wind direction, and wind speed.
+
+DEBUGGING TOOL FUNCTIONS
+
 void fetchTable() - This function imports the data from the groundRollTable into the array of structure: PERFTABLE declared in the header file to be made available to the functions of this file. MUST BE ABOVE ANY FUNCTIONS THAT RELY ON DATA FROM THE PERFTABLE FILE!!!!
 
+FETCHING DATA FUNCTIONS
+
 void printTable(int  tableTemp) - This function prints out the data table for the input temperature.(fetchTable() must be called before calling this function)
+
+
+PERFORMANCE CALCULATION FUNCTIONS
 
 int getDistances(int temp, int press, int* ptrGR,int* ptr50ft) - This function returns the ground roll and fifty feet distance for a given temperature and pressure altitude using pointers.
 
 void adjustDistance(int headWindComponent, char rwID, int* ptrGR, int ptr*ptr50ft) - This function returns the adjusted ground roll and fifty feet distance, given the headwind component (negative if tailwind) and runway ID to check if its grass.
 
 int approachSpeed(double actualWeight) - This function returns the approach speed, given the aircraft's current weight.
-
-int calculatePressureAltitude(double altimeter, int elevation) - This function returns the pressure altitude, given the altimeter settings and elevation of the airplane.
-
-int headwindComponent(int rwyHDG, int windDir, int windSpeed) - This function returns the headwind speed, given the runway heading, wind direction, and wind speed.
-
-int crosswindComponent(int rwyHDG, int windDir, int windSpeed) - This function returns the crosswind speed, given the runway heading, wind direction, and wind speed.
-
-AirportTool (Folder)
-
-airportTool.exe - this executable can be used to create a new airport file, view an existing airport or search for a runway at an airport.
