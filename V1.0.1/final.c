@@ -55,8 +55,8 @@ int main(){
                     windSpeed = getINT("Wind Speed (KTS)");//gets wind direction
                     tempC = getINT("Temperature (Celsius)");//gets Temperature
                     while(altSetting<28.00||altSetting>32.00){//Validates if altimeter setting is in normal range
-                         altSetting = getDOUBLE("Altimeter (Hg)");//gets Altimeter Setting
-                         if(altSetting<28.00||altSetting>32.00){
+                        altSetting = getDOUBLE("Altimeter (Hg)");//gets Altimeter Setting
+                        if(altSetting<28.00||altSetting>32.00){
                             printf("Invalid Altimeter Setting! Min: 28.00Hg MAX: 32.00Hg\n");//comunicates to user if input is erroneous.
                         }
                     }
@@ -88,10 +88,16 @@ int main(){
                     //Calculate Appraoch Speed
                     appSpeed = approachSpeed(weight);
 
+                    //Print output if runway is operatable
+                    if (rwyLEN >= groundRoll){
                     printOutput(icao, rwyID, appSpeed, groundRoll, clear50ft, windDir, windSpeed, tempC, pressureAltitude, xWind, xWindDir);//Write output to file and call file to output
+                    printf("\nCalculation complete! outputting file:\n");
+                    }
+                    else{
+                        printf("\nInsufficient Runway!\n");
+                    }
 
                     //Determines program end
-                    printf("\nCalculation complete! outputting file:\n");
                     printf("\nWould you like to calculate new performance?\n1.Yes\t2.No\n");
                     scanf("%d", &again);
                 }
